@@ -1,0 +1,10 @@
+[package]
+name = "caribon-server"
+version = "0.1.0"
+authors = ["Elisabeth Henry <liz.henry@ouvaton.org>"]
+
+[dependencies]
+iron = "*"
+caribon = "*"
+router = "*"
+urlencoded = "*"
