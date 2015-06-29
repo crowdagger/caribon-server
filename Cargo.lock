@@ -2,7 +2,8 @@
 name = "caribon-server"
 version = "0.1.0"
 dependencies = [
- "caribon 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "caribon 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hyper 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "iron 0.1.19 (registry+https://github.com/rust-lang/crates.io-index)",
  "router 0.0.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "urlencoded 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -26,7 +27,7 @@ dependencies = [
 
 [[package]]
 name = "caribon"
-version = "0.2.2"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "stemmer 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",

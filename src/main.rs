@@ -1,55 +1,57 @@
+mod config;
 extern crate iron;
 extern crate router;
 extern crate caribon;
 extern crate urlencoded;
+extern crate hyper;
 
-use urlencoded::UrlEncodedBody;
+use config::Config;
 use iron::prelude::*;
 use iron::status;
 use iron::mime::Mime;
+use iron::error::HttpResult;
+use hyper::server::Listening;
 use caribon::Parser;
 use router::Router;
-use std::error::Error;
 
 fn main() {
-    let mut router = Router::new();
+    fn router() -> Router {
+        let mut router = Router::new();
+        router.get("/", show_form);
+        router.get("/style.css", show_css);
+        router.get("/serialize.js", show_js);
+        router.post("/result", show_result);
+        router
+    }
 
-    router.get("/", show_form);
-    router.post("/result", show_result);
+    fn show_js(_: &mut Request) -> IronResult<Response> {
+        let js = include_str!("html/serialize-0.2.js");
+        let content_type = "text/javascript".parse::<Mime>().unwrap();
+        Ok(Response::with((content_type, status::Ok, js)))
+    }
+
+    
+    fn show_css(_: &mut Request) -> IronResult<Response> {
+        let css = include_str!("html/main.css");
+        let content_type = "text/css".parse::<Mime>().unwrap();
+        Ok(Response::with((content_type, status::Ok, css)))
+    }
 
     fn show_form(_: &mut Request) -> IronResult<Response> {
-        let s = format!("
-<html>
-<body>
-<h1>Caribon (online version)</h1>
-<p>For more information see <a href = 'https://github.com/lady-segfault/caribon'>Caribon's github page</a></p>
-<form method = 'post' action = '/result'>
-<textarea name = 'text' rows = '20' cols = '60'>Enter text here</textarea>
-<p>Contains HTML?
-<input type='checkbox' name='html' value='true' checked/></p>
-<p>Ignore proper nouns?
-<input type='checkbox' name='ignore_proper' value='true'/></p>
-<p>Max distance to consider a repetition: 
-<input type='text' name='max_distance' value='50'/></p>
-<p>Threshold to underline a word:
-<input type='text' name='threshold' value='1.9'/></p>
-<p>Language: 
-<select name = 'language'>
-{}
-</select>
-</p>
-
-<p>
-<input type='submit' value='OK'></p>
-</form>
-</body>
-</html>",
+        let default_text = "Enter some text in this field and if there are some repetitions we will show them to you!";
+        let parser = Parser::new("english").unwrap();
+        let html = caribon::words_to_html(&parser.detect_local(parser.tokenize(default_text)),
+                                 1.9,
+                                 false);
+        let s = format!(include_str!("html/main.html.in"),
+                        default_text,
                         Parser::list_languages().iter()
                         .map(|s| format!("<option value = '{}' {}>{}</option>",
                                          s,
                                          if s == &"french" {"selected = 'selected'"} else {""},
                                          s))
-                        .fold(String::new(), |s1, s2| s1 + &s2));
+                        .fold(String::new(), |s1, s2| s1 + &s2),
+                        html);
         let content_type = "text/html; charset=UTF-8".parse::<Mime>().unwrap();
         Ok(Response::with((content_type, status::Ok, s)))
     }
@@ -57,35 +59,36 @@ fn main() {
     // Receive a message by POST and play it back.
     fn show_result(request: &mut Request) -> IronResult<Response> {
         // Extract the decoded data as hashmap, using the UrlEncodedQuery plugin.
-        let config:Result<String,String> = match request.get_ref::<UrlEncodedBody>() {
-            Ok(ref hashmap) => {
-                println!("{:?}", hashmap);
-                match hashmap.get("text") {
-                    Some(v) => Ok(v[0].to_string()),
-                    None => {
-                        Err("Didn't find 'text' in POST hashmap".to_string())
+        fn compute_output(request: &mut Request) -> String {
+            let result:Result<Config,String> = Config::new_from_request(request);
+            match result {
+                Ok(config) => {
+                    let option = Parser::new(&config.lang);
+                    if let Some(parser) = option {
+                        let parser = parser
+                            .with_max_distance(config.max_distance)
+                            .with_html(config.html);
+                        let words = parser.tokenize(&config.text);
+                        let repetitions = parser.detect_local(words);
+                        let html = caribon::words_to_html(&repetitions, config.threshold, false);
+                        html
+                    } else {
+                        "Language not implemented".to_string()
                     }
                 }
-            },
-            Err(ref e) => {
-                Err(e.description().to_string())
+                Err(s) => s,
             }
-        };
-
-
-        let content_type = "text/html; charset=UTF-8".parse::<Mime>().unwrap();
-        match config {
-            Ok(s) => {
-                let parser = Parser::new("french").unwrap();
-                let words = parser.tokenize(&s);
-                let repetitions = parser.detect_local(words);
-                let html = caribon::words_to_html(&repetitions, 1.9);
-                println!("html: {},", html);
-                Ok(Response::with((content_type, status::Ok, html)))
-            }
-            Err(s) => Ok(Response::with((content_type, status::Ok, s)))
         }
+        
+        let content_type = "text/html; charset=UTF-8".parse::<Mime>().unwrap();
+        let html = compute_output(request);
+        Ok(Response::with((content_type, status::Ok, html)))        
     }
 
-    Iron::new(router).http("192.168.0.32:3000").unwrap();
+    let ips = vec!("192.168.0.32:3000", "localhost:3000");
+    let mut res:Vec<HttpResult<Listening>> = vec!();
+    
+    for ip in ips {
+        res.push(Iron::new(router()).http(ip));
+    }
 }

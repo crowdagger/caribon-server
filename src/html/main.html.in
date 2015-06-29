@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset = "utf-8">
+    <title>Caribon</title>
+    <link rel = "stylesheet" href = "style.css">
+    <script type="text/javascript" src="/serialize.js"></script>
+    <script language = "javascript">
+    function on(name) {{
+        var elements = document.getElementsByClassName(name);
+        for (var i = 0; i < elements.length; i++) {{
+            var elem = elements[i];
+            elem.style.backgroundColor = "pink";
+        }}
+    }}
+    function off(name) {{
+        var elements = document.getElementsByClassName(name);
+        for (var i = 0; i < elements.length; i++) {{
+            var elem = elements[i];
+            elem.style.backgroundColor = "white";
+        }}
+    }}
+
+    function load_result()
+    {{
+        var element = document.getElementById("caribon_form");
+        console.log("element:"+element);
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onload=function()
+        {{
+            document.getElementById("result").innerHTML=xmlhttp.responseText;
+        }}
+        console.log("action:" + element.action);
+        xmlhttp.open(element.method, element.action, true);
+        console.log("element:" + element);
+        var data = serialize(element);
+        console.log("data" + data);
+        xmlhttp.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+        xmlhttp.send(data);
+        return false;
+    }}
+
+    </script>
+  </head>
+  <body>
+    <h1>Caribon (online version)</h1>
+    <p>For more information see <a href =
+    'https://github.com/lady-segfault/caribon'>Caribon's github
+        page</a></p>
+    <div id = "form">
+      <form id = "caribon_form" method = 'post' action = '/result' enctype="application/x-www-form-urlencoded" onsubmit="return load_result();">
+        <textarea id = "text_input" name = 'text' rows = '20' cols = '60'>{}</textarea>
+        <p title="Allows to escape HTML code in input">Contains HTML?
+          <input type='checkbox' name='html' value='true' checked/></p>
+        <p title="Try to ignore repetitions on proper nouns">Ignore proper nouns?
+          <input type='checkbox' name='ignore_proper' value='true'/></p>
+        <p title="If two occurences of the same word are separated by
+          more than this distance, it won't be counted as a repetition">Max distance (in words) to consider a repetition: 
+          <input type='text' name='max_distance' value='50'/></p>
+        <p title="Underlines words if the number of local repetitions
+          is superior to threshold">Threshold:
+          <input type='text' name='threshold' value='1.9'/></p>
+        <p title="Language for input text">Language: 
+          <select name = 'language'>
+            {}
+          </select>
+        </p>
+        <p id="submit"><input type = "submit" value="OK"></p>
+      </form>
+    </div>
+    <div id = "result">
+      {}
+    </div>
+  </body>
+</html>
