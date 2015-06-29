@@ -85,10 +85,11 @@ fn main() {
         Ok(Response::with((content_type, status::Ok, html)))        
     }
 
-    let ips = vec!("192.168.0.32:3000", "localhost:3000");
+    let ips = config::ips_from_args();
+    println!("ips: {:?}", ips);
     let mut res:Vec<HttpResult<Listening>> = vec!();
     
     for ip in ips {
-        res.push(Iron::new(router()).http(ip));
+        res.push(Iron::new(router()).http(&*ip));
     }
 }
