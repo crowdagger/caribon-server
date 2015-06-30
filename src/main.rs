@@ -13,6 +13,7 @@ use iron::error::HttpResult;
 use hyper::server::Listening;
 use caribon::Parser;
 use router::Router;
+use std::error::Error;
 
 fn main() {
     fn router() -> Router {
@@ -40,9 +41,7 @@ fn main() {
     fn show_form(_: &mut Request) -> IronResult<Response> {
         let default_text = "Enter some text in this field and if there are some repetitions we will show them to you!";
         let parser = Parser::new("english").unwrap();
-        let html = caribon::words_to_html(&parser.detect_local(parser.tokenize(default_text)),
-                                 1.9,
-                                 false);
+        let html = parser.words_to_html(&parser.detect_local(parser.tokenize(default_text).unwrap(), 1.9), false);
         let s = format!(include_str!("html/main.html.in"),
                         default_text,
                         Parser::list_languages().iter()
@@ -56,6 +55,19 @@ fn main() {
         Ok(Response::with((content_type, status::Ok, s)))
     }
 
+    // Try to parse
+    fn try_parse(config:Config) -> Result<String, Box<Error>> {
+        let mut parser = try!(Parser::new(&config.lang));
+        parser = parser
+            .with_max_distance(config.max_distance)
+            .with_html(config.html);
+        let words = try!(parser.tokenize(&config.text));
+        let mut repetitions = parser.detect_local(words, config.threshold);
+        repetitions = parser.detect_global(repetitions, 0.01);
+        let html = parser.words_to_html(&repetitions, false);
+        Ok(html)
+    }
+
     // Receive a message by POST and play it back.
     fn show_result(request: &mut Request) -> IronResult<Response> {
         // Extract the decoded data as hashmap, using the UrlEncodedQuery plugin.
@@ -63,17 +75,9 @@ fn main() {
             let result:Result<Config,String> = Config::new_from_request(request);
             match result {
                 Ok(config) => {
-                    let option = Parser::new(&config.lang);
-                    if let Some(parser) = option {
-                        let parser = parser
-                            .with_max_distance(config.max_distance)
-                            .with_html(config.html);
-                        let words = parser.tokenize(&config.text);
-                        let repetitions = parser.detect_local(words);
-                        let html = caribon::words_to_html(&repetitions, config.threshold, false);
-                        html
-                    } else {
-                        "Language not implemented".to_string()
+                    match try_parse(config) {
+                        Ok(s) => s,
+                        Err(e) => e.description().to_string()
                     }
                 }
                 Err(s) => s,
