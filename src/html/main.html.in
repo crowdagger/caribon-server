@@ -51,20 +51,43 @@
       <form id = "caribon_form" method = 'post' action = '/result' enctype="application/x-www-form-urlencoded" onsubmit="return load_result();">
         <textarea id = "text_input" name = 'text' rows = '20' cols = '60'>{}</textarea>
         <p id="submit"><input type = "submit" value="OK"></p>
+        <p title="Language for input text">Language: 
+          <select name = 'language'>
+            {}
+          </select>
+        </p>
         <p title="Allows to escape HTML code in input">Contains HTML?
-          <input type='checkbox' name='html' value='true' checked/></p>
+          <input type='checkbox' name='html' value='true'/></p>
         <p title="Try to ignore repetitions on proper nouns">Ignore proper nouns?
           <input type='checkbox' name='ignore_proper' value='true'/></p>
         <p title="If two occurences of the same word are separated by
           more than this distance, it won't be counted as a repetition">Max distance (in words) to consider a repetition: 
           <input type='text' name='max_distance' value='50'/></p>
         <p title="Underlines words if the number of local repetitions
-          is superior to threshold">Threshold:
+          is superior to threshold">Local threshold:
           <input type='text' name='threshold' value='1.9'/></p>
-        <p title="Language for input text">Language: 
-          <select name = 'language'>
-            {}
-          </select>
+        <p title="If sets to true, underline words whose frequency of
+          apparition is superior to threshold">Enable global
+          repetition detection?
+          <input type = "checkbox" name = "activate_global" value =
+                 "true"/>
+        </p>
+        <p title="Only used if global repetition detection is enabled">
+          Global threshold:
+          <input type = "texte", name = "global_threshold",
+                 value = "0.01"/>
+        </p>
+        <p title="Fuzzy string matching allow to consider as
+          repetitions words that are 'similar enough', but not identical">Enable
+          fuzzy string matching?
+          <input type = "checkbox" name = "activate_fuzzy" value =
+                 "true" checked/>
+        </p>
+        <p title="Max ratio of difference between two words until they
+          are no more considered a repetition">
+          Fuzzy threshold:
+          <input type = "texte", name = "fuzzy",
+                 value = "0.25"/>
         </p>
       </form>
     </div>

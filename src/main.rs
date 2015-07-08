@@ -62,10 +62,13 @@ fn main() {
         let mut parser = try!(Parser::new(&config.lang));
         parser = parser
             .with_max_distance(config.max_distance)
+            .with_fuzzy(config.fuzzy)
             .with_html(config.html);
         let mut ast = try!(parser.tokenize(&config.text));
         parser.detect_local(&mut ast, config.threshold);
-        parser.detect_global(&mut ast, 0.01);
+        if let Some(threshold) = config.global_threshold {
+            parser.detect_global(&mut ast, threshold);
+        }
         let html = parser.ast_to_html(&mut ast, false);
         Ok(html)
     }
@@ -92,7 +95,6 @@ fn main() {
     }
 
     let ips = config::ips_from_args();
-    println!("ips: {:?}", ips);
     let mut res:Vec<HttpResult<Listening>> = vec!();
     
     for ip in ips {

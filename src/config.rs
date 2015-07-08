@@ -11,6 +11,8 @@ pub struct Config {
     pub max_distance: u32,
     pub html: bool,
     pub ignore_proper: bool,
+    pub fuzzy: Option<f32>,
+    pub global_threshold: Option<f32>
 }
 
 impl Config {
@@ -22,7 +24,9 @@ impl Config {
             threshold: 1.9,
             max_distance: 50,
             html: false,
-            ignore_proper: false
+            ignore_proper: false,
+            fuzzy: None,
+            global_threshold: None
         }
     }
 
@@ -30,7 +34,6 @@ impl Config {
     fn set_field(&mut self, key: &str, value: &str) {
         // We're really laxist but well
         match key {
-            "text" => {}, // do nothing since it has been handled by new
             "html" => self.html = true,
             "ignore_proper" => self.ignore_proper = true,
             "max_distance" => if let Ok(x) = value.parse() { self.max_distance = x },
@@ -44,16 +47,29 @@ impl Config {
                             -> Result<Config,String> {
         match request.get_ref::<UrlEncodedBody>() {
             Ok(hashmap) => {
-                match hashmap.get("text") {
-                    Some(v) => {
-                        let mut config = Config::new(&v[0]);
-                        for (key, value) in hashmap {
-                            config.set_field(key, &value[0]);
+                let mut config = match hashmap.get("text") {
+                    Some(v) => Config::new(&v[0]),
+                    None =>  return Err("Didn't find 'text' in POST hashmap".to_string())
+                };
+                if hashmap.contains_key("activate_fuzzy") {
+                    if let Some(v) = hashmap.get("fuzzy") {
+                        if let Ok(x) = v[0].parse::<f32>() {
+                            config.fuzzy = Some(x);
                         }
-                        Ok(config)
-                    },
-                    None =>  Err("Didn't find 'text' in POST hashmap".to_string())
+                    }
                 }
+                if hashmap.contains_key("activate_global") {
+                    if let Some(v) = hashmap.get("global_threshold") {
+                        if let Ok(x) = v[0].parse::<f32>() {
+                            config.global_threshold = Some(x);
+                        }
+                    }
+
+                }
+                for (key, value) in hashmap {
+                    config.set_field(key, &value[0]);
+                }
+                Ok(config)
             },
             Err(ref e) => Err(e.description().to_string())
         }
