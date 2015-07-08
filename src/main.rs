@@ -41,7 +41,9 @@ fn main() {
     fn show_form(_: &mut Request) -> IronResult<Response> {
         let default_text = "Enter some text in this field and if there are some repetitions we will show them to you!";
         let parser = Parser::new("english").unwrap();
-        let html = parser.words_to_html(&parser.detect_local(parser.tokenize(default_text).unwrap(), 1.9), false);
+        let mut ast = parser.tokenize(default_text).unwrap();
+        parser.detect_local(&mut ast, 1.9);
+        let html = parser.ast_to_html(&mut ast, false);
         let s = format!(include_str!("html/main.html.in"),
                         default_text,
                         Parser::list_languages().iter()
@@ -61,10 +63,10 @@ fn main() {
         parser = parser
             .with_max_distance(config.max_distance)
             .with_html(config.html);
-        let words = try!(parser.tokenize(&config.text));
-        let mut repetitions = parser.detect_local(words, config.threshold);
-        repetitions = parser.detect_global(repetitions, 0.01);
-        let html = parser.words_to_html(&repetitions, false);
+        let mut ast = try!(parser.tokenize(&config.text));
+        parser.detect_local(&mut ast, config.threshold);
+        parser.detect_global(&mut ast, 0.01);
+        let html = parser.ast_to_html(&mut ast, false);
         Ok(html)
     }
 
