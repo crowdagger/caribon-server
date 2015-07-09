@@ -103,7 +103,7 @@ fn main() {
     }
 
     fn get_form(lang: &str, text: &str) -> IronResult<Response> {
-        let parser = Parser::new(lang).unwrap();
+        let parser = Parser::new(lang).unwrap().with_html(true);
         let mut ast = parser.tokenize(text).unwrap();
         parser.detect_local(&mut ast, 1.9);
         let result = parser.ast_to_html(&mut ast, false);
@@ -117,12 +117,14 @@ fn main() {
     }
 
     fn show_fr(_: &mut Request) -> IronResult<Response> {
-        let default_text = "Entrez du texte dans ce champ et s'il y a des répétitions dans le texte elles seront soulignées ci-dessous";
+        let default_text = "<p>Entrez du texte dans ce champ et s'il y a des répétitions dans le texte elles seront soulignées ci-dessous.</p>
+<p><em>Vous pouvez aussi copier/coller du texte depuis un document</em>. <b>De cette façon, la mise en page est préservée</b>.";
         get_form("french", default_text)
     }
 
     fn show_en(_: &mut Request) -> IronResult<Response> {
-        let default_text = "Enter some text in this field and if there are some repetitions we will show them to you!";
+        let default_text = "<p>Enter some text in this field and if there are some repetitions we will show them to you!</p>
+<p><em>Or just copy/paste it from a document</em>. <b>This way, formatting is preserved</b>.";
         get_form("english", default_text)
     }
 
@@ -133,7 +135,7 @@ fn main() {
             .with_max_distance(config.max_distance)
             .with_fuzzy(config.fuzzy)
             .with_more_ignored(&config.ignore)
-            .with_html(config.html);
+            .with_html(true);
         let mut ast = try!(parser.tokenize(&config.text));
         parser.detect_local(&mut ast, config.threshold);
         if let Some(threshold) = config.global_threshold {

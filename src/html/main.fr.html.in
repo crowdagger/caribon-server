@@ -27,6 +27,9 @@
 
     function load_result()
     {{
+        var editable = document.getElementById("editable");
+        var text_input = document.getElementById("text_input");
+        text_input.value = editable.innerHTML;
         var element = document.getElementById("caribon_form");
         console.log("element:"+element);
         var xmlhttp = new XMLHttpRequest();
@@ -103,7 +106,7 @@
       </div>
     </div>
     <div id = "form">
-      <form id = "caribon_form" method = 'post' action = '/result'
+      <form id = "caribon_form" method = 'post' action = 'result'
                 enctype="application/x-www-form-urlencoded"
             onsubmit="return
                       load_result();">
@@ -111,9 +114,11 @@
           <div class = "large-6 columns">
             <div class = "row">
               <div class = "large-12 columns">
-                <label>Texte</label>
-                <textarea id = "text_input" name = 'text'
-                          placeholder="large-12.columns" rows = "10" >{}</textarea>
+                <label>Texte
+                  <div id="editable" contenteditable>{}</div>
+                </label>
+                <textarea id = "text_input" name = "text"
+                          style="display:none;"></textarea>
               </div>
             </div>
             <div class = "row collapse">
@@ -137,14 +142,7 @@
             <fieldset>
               <legend>Plus d'optionss</legend>
               <div class = "row">
-                <div class = "large-6 columns">
-                  <label title="Permet d'afficher correctement le code
-                    HTML dans le texte saisi">Contient du HTML ?
-                    <input type='checkbox' name='html'
-                           value='true'/>
-                  </label>
-                </div>
-                <div class = "large-6 columns">
+                <div class = "large-4 columns">
                   <label title="Si activé, essaie d'ignorer les
                     répétitions sur les noms propres">Ignorer les noms
                     propres ?
@@ -152,9 +150,7 @@
                            value='true'/>
                   </label>
                 </div>
-              </div>
-              <div class = "row">
-                <div class = "large-12 columns">
+                <div class = "large-8 columns">
                   <label title="Liste de mots à ignorer, séparés par
                                 des espaces ou des virgules">Ignorer
                                 les mots suivants :

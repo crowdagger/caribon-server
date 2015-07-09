@@ -9,7 +9,6 @@ pub struct Config {
     pub lang: String,
     pub threshold: f32,
     pub max_distance: u32,
-    pub html: bool,
     pub ignore_proper: bool,
     pub fuzzy: Option<f32>,
     pub global_threshold: Option<f32>,
@@ -25,7 +24,6 @@ impl Config {
             lang: "french".to_string(),
             threshold: 1.9,
             max_distance: 50,
-            html: false,
             ignore_proper: false,
             fuzzy: None,
             global_threshold: None,
@@ -37,7 +35,6 @@ impl Config {
     fn set_field(&mut self, key: &str, value: &str) {
         // We're really laxist but well
         match key {
-            "html" => self.html = true,
             "ignore_proper" => self.ignore_proper = true,
             "ignore_words" => self.ignore = value.to_string(),
             "max_distance" => if let Ok(x) = value.parse() { self.max_distance = x },
