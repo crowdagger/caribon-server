@@ -105,7 +105,7 @@
       </div>
     </div>
     <div id = "form">
-      <form id = "caribon_form" method = 'post' action = '/result'
+      <form id = "caribon_form" method = 'post' action = 'result'
                 enctype="application/x-www-form-urlencoded"
             onsubmit="return
                       load_result();">
