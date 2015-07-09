@@ -3,8 +3,12 @@
   <head>
     <meta charset = "utf-8">
     <title>Caribon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel = "stylesheet" href = "style.css">
+    <link rel="stylesheet" href="foundation.css" />
+    <link rel="stylesheet" href="normalize.css" />
     <script type="text/javascript" src="/serialize.js"></script>
+    <script type="text/javascript" src="/modernizr.js"></script>
     <script language = "javascript">
     function on(name) {{
         var elements = document.getElementsByClassName(name);
@@ -43,56 +47,148 @@
     </script>
   </head>
   <body>
-    <h1>Caribon (online version)</h1>
-    <p>For more information see <a href =
-    'https://github.com/lady-segfault/caribon'>Caribon's github
-        page</a></p>
+    <div class = "row">
+      <div class = "large-8 columns">
+        <h1>Caribon (online version)</h1>
+        <p>Detects repetitions in your text. This is an online
+          webservice using the <a href =
+          "https://github.com/lady-segfault/caribon">Caribon</a>
+          library. For more information, or if you want to download
+          and run this program on your machine, see the <a href =
+          "https://github.com/lady-segfault/caribon">github page</a>.
+        </p>
+        <h2>Usage</h2>
+        <p>
+          Type (or copy/paste) a text in the input field. Select the
+          language of the text, and click "OK"; the result field will
+          be updated and will highlight the repetitions in this text. 
+        </p>
+        <p>
+          There are more options than that: you can play with them to
+          see how they work or, why not, read the documentation.
+        </p>
+      </div>
+      <div class = "large-4 columns">
+        <img src = "/caribon.png" />
+      </div>
+    </div>
     <div id = "form">
-      <form id = "caribon_form" method = 'post' action = '/result' enctype="application/x-www-form-urlencoded" onsubmit="return load_result();">
-        <textarea id = "text_input" name = 'text' rows = '20' cols = '60'>{}</textarea>
-        <p id="submit"><input type = "submit" value="OK"></p>
-        <p title="Language for input text">Language: 
-          <select name = 'language'>
-            {}
-          </select>
-        </p>
-        <p title="Allows to escape HTML code in input">Contains HTML?
-          <input type='checkbox' name='html' value='true'/></p>
-        <p title="Try to ignore repetitions on proper nouns">Ignore proper nouns?
-          <input type='checkbox' name='ignore_proper' value='true'/></p>
-        <p title="If two occurences of the same word are separated by
-          more than this distance, it won't be counted as a repetition">Max distance (in words) to consider a repetition: 
-          <input type='text' name='max_distance' value='50'/></p>
-        <p title="Underlines words if the number of local repetitions
-          is superior to threshold">Local threshold:
-          <input type='text' name='threshold' value='1.9'/></p>
-        <p title="If sets to true, underline words whose frequency of
-          apparition is superior to threshold">Enable global
-          repetition detection?
-          <input type = "checkbox" name = "activate_global" value =
-                 "true"/>
-        </p>
-        <p title="Only used if global repetition detection is enabled">
-          Global threshold:
-          <input type = "texte", name = "global_threshold",
-                 value = "0.01"/>
-        </p>
-        <p title="Fuzzy string matching allow to consider as
-          repetitions words that are 'similar enough', but not identical">Enable
-          fuzzy string matching?
-          <input type = "checkbox" name = "activate_fuzzy" value =
-                 "true" checked/>
-        </p>
-        <p title="Max ratio of difference between two words until they
-          are no more considered a repetition">
-          Fuzzy threshold:
-          <input type = "texte", name = "fuzzy",
-                 value = "0.25"/>
-        </p>
+      <form id = "caribon_form" method = 'post' action = '/result'
+                enctype="application/x-www-form-urlencoded"
+            onsubmit="return
+                      load_result();">
+        <div class = "row">
+          <div class = "large-6 columns">
+            <div class = "row">
+              <div class = "large-12 columns">
+                <label>Input text</label>
+                <textarea id = "text_input" name = 'text'
+                          placeholder="large-12.columns" rows = "10" >{}</textarea>
+              </div>
+            </div>
+            <div class = "row collapse">
+              <div class = "large-4 columns">
+                <span class = "prefix" title = "Input text language">Language</span>
+              </div>
+              <div class = "large-6 columns">
+                <select name = "language" >
+                  {}
+                </select>
+              </div>
+              <div class = "large-2 columns">
+                <p class = "button postfix" onclick="return load_result();">
+                  OK
+                </p>
+                <!--                  <input type = "submit" value="OK">-->
+              </div>
+            </div>
+          </div>
+          <div class = "large-6 columns">
+            <fieldset>
+              <legend>More options</legend>
+              <div class = "row">
+                <div class = "large-6 columns">
+                  <label title="Allows to escape HTML code in input">Contains HTML?
+                    <input type='checkbox' name='html'
+                           value='true'/>
+                  </label>
+                </div>
+                <div class = "large-6 columns">
+                  <label title="Try to ignore repetitions on proper nouns">Ignore proper nouns?
+                    <input type='checkbox' name='ignore_proper'
+                           value='true'/>
+                  </label>
+                </div>
+              </div>
+              <fieldset>
+                <legend>Local detection</legend>
+                <div class = "row">
+                  <div class = "large-6 columns">
+                    <label title="If two occurences of the same word are separated by
+                                  more than this distance, it won't be counted as a repetition">Max distance (in words): 
+                      <input type='text' name='max_distance'
+                             value='25'/>
+                    </label>
+                  </div>
+                  <div class = "large-6 columns">
+                    <label title="Underlines words if the number of local repetitions
+                                  is superior to threshold">Local threshold:
+                      <input type='text' name='threshold' value='1.9'/>
+                    </label>
+                  </div>
+                </div>
+                <div class = "row">
+                  <div class = "large-6 columns">
+                    <label title="Fuzzy string matching allow to consider as
+                                  repetitions words that are 'similar enough', but not identical">Fuzzy string matching?
+                      <input type = "checkbox" name = "activate_fuzzy" value =
+                             "true" checked/>
+                    </label>
+                  </div>
+                  <div class = "large-6 columns">
+                    <label title="Max ratio of difference between two words until they
+                                  are no more considered a repetition">
+                      Fuzzy threshold:
+                      <input type = "texte", name = "fuzzy",
+                             value = "0.25"/>
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Global detection</legend>
+                <div class = "row">
+                  <div class = "large-6 columns">
+                    <label title="If sets to true, underline words whose frequency of
+                                  apparition is superior to threshold">Enable global
+                      repetition detection?
+                      <input type = "checkbox" name = "activate_global" value =
+                             "true"/>
+                    </label>
+                  </div>
+                  <div class = "large-6 columns">
+                    <label title="Only used if global repetition detection is enabled">
+                      Global threshold:
+                      <input type = "texte", name = "global_threshold",
+                             value = "0.01"/>
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+            </fieldset>
+          </div>
+        </div>
       </form>
     </div>
-    <div id = "result">
-      {}
+    <div class = "row">
+      <div class = "large-12 columns">
+        <fieldset>
+          <legend>Result</legend>
+          <div id = "result">
+            {}
+          </div>
+        </fieldset>
+      </div>
     </div>
   </body>
 </html>

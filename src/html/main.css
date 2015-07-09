@@ -1,12 +1,8 @@
 #form {
-    float: left;
-    width: 45%;
     margin: 1em;
 }
 
 #result {
-    float: right;
     text-align: justify;
-    width: 45%;
     margin: 1em;
 }
