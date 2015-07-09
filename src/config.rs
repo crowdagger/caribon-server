@@ -12,7 +12,9 @@ pub struct Config {
     pub html: bool,
     pub ignore_proper: bool,
     pub fuzzy: Option<f32>,
-    pub global_threshold: Option<f32>
+    pub global_threshold: Option<f32>,
+    pub ignore: String,
+        
 }
 
 impl Config {
@@ -26,7 +28,8 @@ impl Config {
             html: false,
             ignore_proper: false,
             fuzzy: None,
-            global_threshold: None
+            global_threshold: None,
+            ignore: String::new(),
         }
     }
 
@@ -36,6 +39,7 @@ impl Config {
         match key {
             "html" => self.html = true,
             "ignore_proper" => self.ignore_proper = true,
+            "ignore_words" => self.ignore = value.to_string(),
             "max_distance" => if let Ok(x) = value.parse() { self.max_distance = x },
             "threshold" => if let Ok(x) = value.parse() { self.threshold = x },
             "language" => self.lang = value.to_string(),

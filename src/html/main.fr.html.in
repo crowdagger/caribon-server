@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset = "utf-8">
     <title>Caribon</title>
@@ -50,7 +50,7 @@
     <nav class="top-bar" data-topbar role="navigation">
       <ul class="title-area">
         <li class="name">
-          <h1><a href="en">Caribon</a></h1>
+          <h1><a href="fr">Caribon</a></h1>
         </li>
         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
         <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
@@ -59,8 +59,8 @@
       <section class="top-bar-section">
         <!-- Right Nav Section -->
         <ul class="right">
-          <li><a href="doc_en">Documentation</a></li>
-          <li><a href="https://github.com/lady-segfault/caribon">Github page</a></li>
+          <li><a href="doc_fr">Documentation</a></li>
+          <li><a href="https://github.com/lady-segfault/caribon">Page Github</a></li>
         </ul>
         
         <!-- Left Nav Section
@@ -71,30 +71,31 @@
     </nav>
 
     <dl class="sub-nav">
-      <dt>Language:</dt>
-      <dd class="active"><a href="en">English</a></dd>
-      <dd><a href="fr">French</a></dd>
+      <dt>Langue:</dt>
+      <dd><a href="en">Anglais</a></dd>
+      <dd class = "active"><a href="fr">Français</a></dd>
     </dl>
     
     <div class = "row">
       <div class = "large-8 columns">
-        <h1>Caribon (online version)</h1>
-        <p>Detects repetitions in your text. This is an online
-          webservice using the <a href =
-          "https://github.com/lady-segfault/caribon">Caribon</a>
-          library. For more information, or if you want to download
-          and run this program on your machine, see the <a href =
-          "https://github.com/lady-segfault/caribon">github page</a>.
+        <h1>Caribon (en ligne)</h1>
+        <p>Détecte les répétitions dans votre texte. Ce site est
+          un <em>webservice</em> utilisant la bibliothèque <a href =
+          "https://github.com/lady-segfault/caribon">Caribon</a>. Pour
+          plus d'information, ou si vous voulez télécharger et lancer
+          ce programme sur votre machine, consultez la <a href =
+          "https://github.com/lady-segfault/caribon">page Github</a>.
         </p>
-        <h2>Usage</h2>
+        <h2>Utilisation</h2>
         <p>
-          Type (or copy/paste) a text in the input field. Select the
-          language of the text, and click "OK"; the result field will
-          be updated and will highlight the repetitions in this text. 
+          Tapez (ou copiez/collez) un texte dans le champ
+          d'entrée. Choisissez la langue du texte, et cliquez sur
+          « OK ». Le champ « Résultat » sera mis à jour et soulignera
+          les répétitions que vous auriez pu commettre.
         </p>
         <p>
-          There are more options than that: you can play with them to
-          see how they work or, why not, read the documentation.
+          Il y a un peu plus d'options : vous pouvez jouer avec pour
+          voir comment elles marchent ou, pourquoi pas, lire la documentation.
         </p>
       </div>
       <div class = "large-4 columns">
@@ -110,7 +111,7 @@
           <div class = "large-6 columns">
             <div class = "row">
               <div class = "large-12 columns">
-                <label>Input text</label>
+                <label>Texte</label>
                 <textarea id = "text_input" name = 'text'
                           placeholder="large-12.columns" rows = "10" >{}</textarea>
               </div>
@@ -134,16 +135,19 @@
           </div>
           <div class = "large-6 columns">
             <fieldset>
-              <legend>More options</legend>
+              <legend>Plus d'optionss</legend>
               <div class = "row">
                 <div class = "large-6 columns">
-                  <label title="Allows to escape HTML code in input">Contains HTML?
+                  <label title="Permet d'afficher correctement le code
+                    HTML dans le texte saisi">Contient du HTML ?
                     <input type='checkbox' name='html'
                            value='true'/>
                   </label>
                 </div>
                 <div class = "large-6 columns">
-                  <label title="Try to ignore repetitions on proper nouns">Ignore proper nouns?
+                  <label title="Si activé, essaie d'ignorer les
+                    répétitions sur les noms propres">Ignorer les noms
+                    propres ?
                     <input type='checkbox' name='ignore_proper'
                            value='true'/>
                   </label>
@@ -151,41 +155,43 @@
               </div>
               <div class = "row">
                 <div class = "large-12 columns">
-                  <label title="List of words to ignore, separated by
-                                comma or spaces">Ignore following words:
+                  <label title="Liste de mots à ignorer, séparés par
+                                des espaces ou des virgules">Ignorer
+                                les mots suivants :
                     <input type = "text" name = "ignore_words" />
                   </label>
                 </div>
               </div>
               <fieldset>
-                <legend>Local detection</legend>
+                <legend>Détection locale</legend>
                 <div class = "row">
                   <div class = "large-6 columns">
-                    <label title="If two occurences of the same word are separated by
-                                  more than this distance, it won't be counted as a repetition">Max distance (in words): 
+                    <label title="Si deux occurrences d'un mot sont séparées par plus que cette
+                                  distance, cela ne sera pas compté comme une répétition">
+                      Distance max (en mots) : 
                       <input type='text' name='max_distance'
                              value='25'/>
                     </label>
                   </div>
                   <div class = "large-6 columns">
-                    <label title="Underlines words if the number of local repetitions
-                                  is superior to threshold">Local threshold:
+                    <label title="Souligne les mots dont le nombre local de répétitions 
+                                  est supérieur à ce seuil">Seuil local:
                       <input type='text' name='threshold' value='2.0'/>
                     </label>
                   </div>
                 </div>
                 <div class = "row">
                   <div class = "large-6 columns">
-                    <label title="Fuzzy string matching allow to consider as
-                                  repetitions words that are 'similar enough', but not identical">Fuzzy string matching?
+                    <label title="La détection approximative permet de considérer comme répétitions des
+                                  mots qui sont « suffisamment similaires », sans forcément être identiques">Détection des mots proches ?
                       <input type = "checkbox" name = "activate_fuzzy" value =
                              "true" checked/>
                     </label>
                   </div>
                   <div class = "large-6 columns">
-                    <label title="Max ratio of difference between two words until they
-                                  are no more considered a repetition">
-                      Fuzzy threshold:
+                    <label title="Taux maximal de différence entre deux mots, après 
+                                  lequel ils ne sont plus considérés comme similaires">
+                      Seuil d'approximation :
                       <input type = "text", name = "fuzzy",
                              value = "0.25"/>
                     </label>
@@ -193,19 +199,19 @@
                 </div>
               </fieldset>
               <fieldset>
-                <legend>Global detection</legend>
+                <legend>Détection gloable</legend>
                 <div class = "row">
                   <div class = "large-6 columns">
-                    <label title="If sets to true, underline in blue words whose frequency of
-                                  apparition is superior to threshold">Enable global
-                      repetition detection?
+                    <label title="Si activé, soulignera en bleu les mots dont la fréquence d'apparition
+                                  est supérieure au seuil">Activer la
+                                  détection globale de répétitions ?
                       <input type = "checkbox" name = "activate_global" value =
                              "true"/>
                     </label>
                   </div>
                   <div class = "large-6 columns">
-                    <label title="Only used if global repetition detection is enabled">
-                      Global threshold:
+                    <label title="Seulement utilisé si la détection gloable est activée.">
+                      Seuil global:
                       <input type = "text", name = "global_threshold",
                              value = "0.01"/>
                     </label>
@@ -220,7 +226,7 @@
     <div class = "row">
       <div class = "large-12 columns">
         <fieldset>
-          <legend>Result</legend>
+          <legend>Résultat</legend>
           <div id = "result">
             {}
           </div>
