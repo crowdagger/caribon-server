@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset = "utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel = "stylesheet" href = "style.css">
+    <link rel="stylesheet" href="foundation.css" />
+    <link rel="stylesheet" href="normalize.css" />
+    <script type="text/javascript" src="serialize.js"></script>
+  </head>
+  <body>
+    <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="en">Caribon</a></h1>
+        </li>
+        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+      </ul>
+      
+      <section class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="right">
+          <li><a href="en">Main page</a></li>
+          <li><a href="https://github.com/lady-segfault/caribon">Github page</a></li>
+        </ul>
+        
+        <!-- Left Nav Section
+        <ul class="left">
+          <li><a href="#">Left Nav Button</a></li>
+        </ul>-->
+      </section>
+    </nav>
+
+    <dl class="sub-nav">
+      <dt>Language:</dt>
+      <dd class="active"><a href="doc_en">English</a></dd>
+      <dd><a href="doc_fr">French</a></dd>
+    </dl>
+    
+    <div class = "row">
+      <div class = "large-12 columns">
+        <h1>Documentation</h1>
+        <h2>Usage</h2>
+        <p>The purpose of Caribon is to detect repetitions in your
+        text. In order to do so, you just have to copy and paste a
+        (portion of) a document in the input text area. This document
+        will be pasted as HTML, so basic formatting should be
+          preserved when you copy/paste your text, e.g. from LibreOffice.</p>
+        <p>Caribon also provides some options to configure how the
+        repetition detection works. Here are some details about
+          them.</p>
+        <h3>Language</h3>
+        <p>Pretty easy to figure, as it's just the language of your
+        text. It is important for two reasons. The first one is that
+        Caribon internally uses a stemming library, which will detect
+        when words are derived from the same stem: e.g. "eats", "eat"
+        and "eating" will be considered the same word. (More
+        information on how this stemming library works can be found on
+        the <a href = "http://snowball.tartarus.org/">Snowball project
+        website</a>.) The second reason is
+        that for some languages (currently only french and english),
+        Caribon provides a default list of words to ignore for
+        repetition counting (e.g. in english "it", "a" and so on are
+        on it) to avoid cluttering the result file.</p>
+        <h3>Global and local repetitions</h3>
+        <p>Currently, Caribon provides two complementary algorithms:
+          local and global.</p>
+        <div class = "row">
+          <div class = "large-6 columns">
+            <h3>Local algorithm</h3>
+            <p>The local algorithm will consider words as repetitions
+            if they appear relatively "closely" (this is determined by
+            the <em>Max distance</em> parameter: two similar words
+            will be considered as repetitions if the number of words
+            between them is less than this distance. Caribon will
+            underline local repetitions in <span style =
+            "test-decoration: underline; color: green">green</span>,  <span style =
+            "test-decoration: underline; color: orange">orange</span>
+            and  <span style = "test-decoration: underline; color: red">red</span>
+            according to the number of repetitions (green is still
+              relatively OK, while red is bad).
+            </p>
+            <p>Parameters for local algorithm:</p>
+            <ul>
+              <li><strong>Max distance</strong> : sets the maximal
+              number of words separating two repetitions; above that,
+                they are no more considered a repetition ;
+              </li>
+              <li><strong>Local threshold</strong> : minimal number of
+                local repetitions to underline a word. Why a float
+                value for the threshold, instead of an integer one?
+                Because the local repetition detector will underline
+                words in different colors: green, orange and red
+                according to the "severity" of the repetitions. So
+                setting the threshold to 1.01 or 2.0 will not change
+                which words are underlined, but they will be in orange
+                or red more quickly in the first case. 
+              </li>
+            </ul>
+          </div>
+          <div class = "large-6 columns">
+            <h3>Global algorithm</h3>
+            <p>The global algorithm counts the apparition of each
+            word on the full document, and consider them a repetition
+            if the ratio (that is, the number of apparition of a given
+            word divided by the total number of words) is superior to
+            the <em>Global threshold</em> parameter. E.g., a global
+            theshold of 0.01 means a word will be considered a global
+            repetition if it counts for more than 1% of the words of
+            the text. Caribon will underline global repetitions in
+             <span style =
+            "test-decoration: underline; color: blue">blue</span>. By default, the global algorithm is not activated,
+            because it does not make sense for small text (if you give
+            it a ten words sentence, each word will amout to 10% of
+            the total number of words and will thus be labeled a
+              global repetition).
+            </p>
+            <p>Parameters for global algorithm:</p>
+            <ul>
+              <li><strong>Global threshold</strong>: minimum ratio of
+              a word in a text (number of occurences of this words divided by total
+              number of words) to underline it.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <h3>Fuzzy string matching</h3>
+        <p>Caribon uses a stemming library to detect words that are
+        part of the same 'family'. It turns out that this algorithm is
+        not always enough, and particularly it doesn't detect
+        repetitions when there is a typo (e.g. "higlight" and
+        "highlight" should probably be considered a repetition, even
+        if it is mispelled in the first case). To solve this issue,
+          there is the option of activating fuzzy string matching.</p>
+        <p>If you do so, you must specify the <em>fuzzy
+        threshold</em>. It takes avalue is a number between 0.0 and
+        1.0 which represents the maximal 'difference' between two
+        words until they are no more identical: a value of 0.2 means
+        that two words must be at most "20% different" until they are
+          no more considered the same.</p>
+        <p>Internally, this algorithm uses the <a href = "https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein
+        distance</a>
+        (and more specifically the <a href = "https://crates.io/crates/edit-distance">Rust implementation by Florian
+        Ebelling</a>) which computes a distance between two strings by
+        estimating the number of insertions, deletions and
+        permutations it require to go from one to another. E.g., "dog"
+        and "dogs" have a distance of 1, while "dog" and "cat" have a
+        distance of 3. This value is then divided by the length of the
+        string to match, and two string are considered "identical"
+        (or, at least, a repetition) when this value is less than the
+          <em>fuzzy threshold</em>.
+        <p>Fuzzy matching is practical, but you should not set
+        the <em>fuzzy threshold</em> to a
+        too high value, else you will have a lot of false
+          positives. Empirically, 0.2 or 0.25 is a good choice.</p>
+        <h3>Ignored words</h3>
+        <p>Some words, like "a" or "the", are unavoidably repeated a
+        lot and it doesn't make much sense to consider them a
+        repetition. It is thus useful to ignore some words. Caribon
+        provides a default list for english and french, but it is in
+        all cases possible to add your own words to the list in
+          the <em>Ignore following words</em> field.</p>
+        <p>This list must be separated by either spaces or commas (or,
+        actually, anything that isn't a letter). Basically, you should
+        probably start with an empty list, and add the words that are
+          marked as a repetition but you don't think should be.</p>
+        <p>Another option for ignoring words is <em>Ignore proper
+        nouns</em>. If sets to true, Caribon will try to ignore proper
+        nouns. That is, a word will not count for repetition if it
+        starts with a capital letter and is not at the beginning of a
+          sentence.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
