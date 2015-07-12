@@ -123,7 +123,7 @@
             </div>
             <div class = "row collapse">
               <div class = "large-4 columns">
-                <span class = "prefix" title = "Input text language">Language</span>
+                <span class = "prefix" title = "Input text language">Langue</span>
               </div>
               <div class = "large-6 columns">
                 <select name = "language" >

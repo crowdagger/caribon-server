@@ -28,6 +28,7 @@ fn main() {
         router.get("/en", show_en);
         router.get("/fr", show_fr);
         router.get("/doc_en", show_doc_en);
+        router.get("/doc_fr", show_doc_fr);
 //        router.get("/url", show_url);
         router.get("/style.css", show_css);
         router.get("/serialize.js", show_js);
@@ -97,6 +98,12 @@ fn main() {
     fn show_doc_en(_: &mut Request) -> IronResult<Response> {
         let content_type = "text/html; charset=UTF-8".parse::<Mime>().unwrap();
         let html = include_str!("html/doc_en.html");
+        Ok(Response::with((content_type, status::Ok, html)))
+    }
+
+    fn show_doc_fr(_: &mut Request) -> IronResult<Response> {
+        let content_type = "text/html; charset=UTF-8".parse::<Mime>().unwrap();
+        let html = include_str!("html/doc_fr.html");
         Ok(Response::with((content_type, status::Ok, html)))
     }
 

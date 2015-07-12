@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset = "utf-8">
+    <title>Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel = "stylesheet" href = "style.css">
+    <link rel="stylesheet" href="foundation.css" />
+    <link rel="stylesheet" href="normalize.css" />
+    <script type="text/javascript" src="serialize.js"></script>
+  </head>
+  <body>
+    <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="fr">Caribon</a></h1>
+        </li>
+        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+      </ul>
+      
+      <section class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="right">
+          <li><a href="fr">Page principale</a></li>
+          <li><a href="https://github.com/lady-segfault/caribon">Github page</a></li>
+        </ul>
+        
+        <!-- Left Nav Section
+        <ul class="left">
+          <li><a href="#">Left Nav Button</a></li>
+        </ul>-->
+      </section>
+    </nav>
+
+    <dl class="sub-nav">
+      <dt>Language:</dt>
+      <dd><a href="doc_en">English</a></dd>
+      <dd class = "active"><a href="doc_fr">French</a></dd>
+    </dl>
+    
+    <div class = "row">
+      <div class = "large-12 columns">
+        <h1>Documentation</h1>
+        <h2>Utilisation</h2>
+        <p>L'objectif de Caribon est de détecter les répétitions dans
+        votre texte. Pour cela, vous avez juste à copier/coller un
+        (extrait de) document dans la zone de saisie de texte. Ce
+        document sera collé en HTML, donc une mise en page basique
+        devrait être préservée lorsque vous copiez votre document depuis
+        un traitement de texte, par exemple LibreOffice.</p>
+        <p>Caribon fournit aussi un certain nombre d'options pour
+        configurer la manière donc fonctionne la détection de
+        répétitions. Voici quelques détails sur elles.</p>
+        <h3>Langue</h3>
+        <p>La langue dans lequel le texte est écrit. C'est important
+        pour deux raisons. La première est que Caribon utilise en
+        interne une bibliothèque de <a href =
+        "https://fr.wikipedia.org/wiki/Racinisation">racinisation</a>
+        (<em>stemming</em>), qui détecte lorsque deux mots sont issus
+        de la même racine. Par exemple « mange », « mangerai »
+        et « mangés » seront considérés comme le même mot. (Pour plus
+        d'informations sur le fonctionnement de cette bibliothèque de
+        racinisation, voir le <a href =
+        "http://snowball.tartarus.org/">site du projet Snowball</a>.)
+        La seconde raison est que, pour certaines langues
+        (actuellement le français et l'angais), Caribon fournit une
+        liste de mots à ignorer pour les répétitions (par exemple en
+        français « la » ou « le » ne seront pas comptabilisés), afin
+        d'éviter d'encombrer le résultat avec trop de faux positifs.</p>
+        <h3>Répétitions locales et globales</h3>
+        <p>Actuellement, Caribon utilise deux algorithmes
+        complémentaires pour détecter les répétitions : localement et globalement.
+        <div class = "row">
+          <div class = "large-6 columns">
+            <h3>Algorithme local</h3>
+            <p>Cet algorithme considère comme répétitions des mots
+            identiques s'ils sont suffisamment proches (concrètement,
+            cela dépent du paramètre <em>Distance max</em> : deux mots
+            similaires seront considérés comme une répétition si le
+            nombre de mots qui les sépare est inférieur à cette
+            distance. Caribon soulignera les répétitions locales en <span style =
+            "test-decoration: underline; color: green">vert</span>,  <span style =
+            "test-decoration: underline; color: orange">orange</span>
+            et  <span style = "test-decoration: underline; color: red">rouge</span>
+            selon le nombre de répétitions (vert, cela va encore,
+            rouge c'est mauvais signe).
+            </p>
+            <p>Paramètres :</p>
+            <ul>
+              <li><strong>Distance max</strong> : le nombre maximal de
+              mots entre deux répétitions ; au-dessus, cela ne sera
+              plus considéré comme une répétition ;
+              </li>
+              <li><strong>Seuil local</strong> : nombre minimal de
+                répétitions locales pour souligner un mot. Par défaut,
+                à 2.0, souligne dès qu'un mot est répété
+                localement. Ce nombre est un réel et pas un entier (on
+                peut donc mettre un seuil à 1.5), car l'algorithme ne
+                soulignera pas les mots avec la même couleur en
+                fonction de la manière dont ils dépassent le
+                seuil. Autrement dit, mettre un seuil à 1.01 ou à 2.0
+                ne changera pas quels mots sont soulignés, mais ils
+                passeront plus rapidement en orange ou en rouge dans
+                le premier cas que dans le second. 
+              </li>
+            </ul>
+          </div>
+          <div class = "large-6 columns">
+            <h3>Algorithme global</h3>
+            <p>Cet algorithme compte l'apparition de chaque mot dans
+            l'ensemble du document, et le considère comme une
+            répétition si sa fréquence d'apparation (c'est-à-dire, le
+            nombre d'occurrences d'un mot donné divisé par le nombre
+              total de mots) est supérieure au <em>Seuil global</em>.
+              Par exemple, un seuil global à 0.01 veut dire qu'un mot
+            sera considéré comme une répétition s'il représente plus
+            d'1% de tous les mots du texte. Caribon souligne les
+            répétitions globales en <span style =
+                                          "test-decoration: underline;
+                                           color: blue">blue</span>.</p>
+            <p>Par défaut, l'algorithme global n'est pas activé, car
+            il n'a pas beaucoup de sens pour des textes courts (si
+            vous tapez une phrase de dix mots, chaque mot représentera
+            10% du texte et serait considéré comme une répétition
+            globale). 
+            </p>
+            <p>Paramètre</p>
+            <ul>
+              <li><strong>Seuil global</strong> : fréquence minimale
+              d'apparition d'un mot pour qu'il soit souligné.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <h3>Recherche de mots approximatifs</h3>
+        <p>Caribon utilise une bibliothèque de racinisation pour
+        repérer les mots qui font partie de la même « famille ». Il
+        s'avère cependant que cet algorithme n'est pas toujours
+        suffisant. Il ne permet notamment pas de détecter les fautes
+        de frappe (par exemple « soulinger » et « souligner »
+        devraient probablement être considérés comme une répétition,
+        même s'il y a une faute dans le premier mot). Pour résoudre ce
+        problème, il y a l'option d'activer la <em>Détection des mots
+            proches</em>.
+        <p>Si celle-ci est activée, elle utilise le
+        paramètre <em>Seuil d'approximation</em>. Celui-ci est une
+        valeur comprise entre 0.0 et 1.0 qui représente la
+        « différence » maximale entre deux mots après laquelle ils ne
+        seront plus considérés comme similaires : ainsi, une valeur de
+        0.2 veut dire que deux mots doivent être au plus « différents
+        de 20% » pour être similaires.</p>
+        <p>Cet algorithme utilise en interne la <a href =
+        "https://en.wikipedia.org/wiki/Levenshtein_distance">distance
+        de Levenshtein</a> (plus spécifiquement, l <a href =
+        "https://crates.io/crates/edit-distance">implémentation en
+        Rust par Florian
+        Ebelling</a>) qui calcule la distance entre deux mots en
+        évaluant le nombre d'insertions, suppressions et permutations
+        qu'il faut pour passer de l'un à l'autre. Par exemple,
+        « chat » et « chas » auront une distance de 1, tandis que
+        « chat » et « chien » auront une distance de 3. Cette valeur
+        est divisée par la longueur du mot, et deux mots seront
+        considérés comme similaires (et donc comme une répétition)
+        lorsque cette valeur est inférieur au <em>seuil de proximité</em>.
+        <p>La recherche approximative est pratique, mais le seuil ne
+        devrait pas être configuré à un niveau trop élevé, sous peine
+        d'avoir beaucoup de faux positifs.</p>
+        <h3>Mots à ignorer</h3>
+        <p>Certains mots, comme, « la » ou « le », apparaissent très
+        souvent et ne sont en général pas considérés comme une
+        répétition. Il est donc utile de pouvoir ignorer certains
+        mots. Caribon intègre une liste par défaut pour l'anglais et
+        le français, mais il est dans tous les cas possible de
+        rajouter vos propres mots à la liste dans le champ <em>Ignorer
+        les mots suivants</em>.
+        <p>Ces mots doivent être séparés par des virgules ou des
+        espaces (en fait, n'importe quoi qui n'est pas une
+        lettre). Vous devriez probablement commencer avec une liste
+        vierge, puis ajouter les mots qui sont marqués comme des
+        répétitions alors que vous estimez qu'ils devraient être ignorés.</p>
+        <p>Une autre option pour ignorer des mots est  <em>Ignorer les
+        noms propres</em>. Si elle est activée, Caribon essaiera
+        d'ignorer les noms propres. Concrètement, un mot ne sera pas
+        compté comme une répétition s'il commence par une majuscule
+        alors qu'il n'est pas au début d'une phrase.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
