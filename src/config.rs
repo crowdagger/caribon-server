@@ -32,16 +32,23 @@ impl Config {
     }
 
     /// Sets a field according to hashmap entry
-    fn set_field(&mut self, key: &str, value: &str) {
+    fn set_field(&mut self, key: &str, value: &str) -> Result<(), String> {
         // We're really laxist but well
         match key {
             "ignore_proper" => self.ignore_proper = true,
             "ignore_words" => self.ignore = value.to_string(),
-            "max_distance" => if let Ok(x) = value.parse() { self.max_distance = x },
-            "threshold" => if let Ok(x) = value.parse() { self.threshold = x },
+            "max_distance" => self.max_distance = match value.parse::<u32>() {
+                Ok(x) => x,
+                Err(_) => return Err("Max distance must be a positive integer".to_string())
+            },
+            "threshold" => self.threshold = match value.parse::<f32>() {
+                Ok(x) => x,
+                Err(_) => return Err("Local threshold must be a float".to_string())
+            },
             "language" => self.lang = value.to_string(),
             _ => {}
         }
+        Ok(())
     }
 
     pub fn new_from_request(request: &mut Request)
@@ -54,21 +61,23 @@ impl Config {
                 };
                 if hashmap.contains_key("activate_fuzzy") {
                     if let Some(v) = hashmap.get("fuzzy") {
-                        if let Ok(x) = v[0].parse::<f32>() {
-                            config.fuzzy = Some(x);
+                        match v[0].parse::<f32>() {
+                            Ok(x) => config.fuzzy = Some(x),
+                            Err(_) => return Err("Fuzzy threshold must be a float".to_string())
                         }
                     }
                 }
                 if hashmap.contains_key("activate_global") {
                     if let Some(v) = hashmap.get("global_threshold") {
-                        if let Ok(x) = v[0].parse::<f32>() {
-                            config.global_threshold = Some(x);
-                        }
+                        config.global_threshold = match v[0].parse::<f32>() {
+                            Ok(x) => Some(x),
+                            Err(_) => return Err("Global threshold must be a float".to_string())
+                        };
                     }
 
                 }
                 for (key, value) in hashmap {
-                    config.set_field(key, &value[0]);
+                    try!(config.set_field(key, &value[0]));
                 }
                 Ok(config)
             },
