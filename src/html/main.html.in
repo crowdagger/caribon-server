@@ -46,14 +46,8 @@
     
     <div class = "row">
       <div class = "large-8 columns">
-        <h1>Caribon (online version)</h1>
-        <p>Detects repetitions in your text. This is an online
-          webservice using the <a href =
-          "https://github.com/lady-segfault/caribon">Caribon</a>
-          library. For more information, or if you want to download
-          and run this program on your machine, see the <a href =
-          "https://github.com/lady-segfault/caribon">github page</a>.
-        </p>
+        <h1>Caribon repetition detector (online version)</h1>
+        <p><b>Version {}</b></p>
         <h2>Usage</h2>
         <p>
           Type (or copy/paste) a text in the input field. Select the
@@ -61,8 +55,8 @@
           be updated and will highlight the repetitions in this text. 
         </p>
         <p>
-          There are more options than that: you can play with them to
-          see how they work or, why not, read the documentation.
+          For more information on the other options, you can read the
+          <a href = "doc_en">documentation</a>.
         </p>
       </div>
       <div class = "large-4 columns">

@@ -110,8 +110,8 @@ fn main() {
         parser.detect_local(&mut ast, 1.9);
         let result = parser.ast_to_html(&mut ast, false);
         let s = match lang {
-            "english" => format!(main_html!("english"), text, display_list_languages(lang), result),
-            "french" => format!(main_html!("french"), text, display_list_languages(lang), result),
+            "english" => format!(main_html!("english"), env!("CARGO_PKG_VERSION"),text, display_list_languages(lang), result),
+            "french" => format!(main_html!("french"), env!("CARGO_PKG_VERSION"), text, display_list_languages(lang), result),
             _ => panic!("Unknown lang")
         };
         let content_type = "text/html; charset=UTF-8".parse::<Mime>().unwrap();
