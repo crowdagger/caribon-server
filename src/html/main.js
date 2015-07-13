@@ -15,6 +15,7 @@ function off(name) {
 
 function load_result()
 {
+    document.getElementById("result").innerHTML="<p>Computing result...</p>";
     var editable = document.getElementById("editable");
     var text_input = document.getElementById("text_input");
     text_input.value = editable.innerHTML;
@@ -31,6 +32,15 @@ function load_result()
     var data = serialize(element);
     console.log("data" + data);
     xmlhttp.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+    xmlhttp.timeout = "4000";
+    xmlhttp.ontimeout = function() {
+        document.getElementById("result").innerHTML="<span class = 'alert label'>Server took too much time to answer, aborting!</span>";
+    };
     xmlhttp.send(data);
     return false;
 }
+
+
+
+
+
