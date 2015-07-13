@@ -7,8 +7,9 @@
     <link rel = "stylesheet" href = "style.css">
     <link rel="stylesheet" href="foundation.css" />
     <link rel="stylesheet" href="normalize.css" />
-    <script type="text/javascript" src="serialize.js"></script>
-    <script type="text/javascript" src="foundation.js"></script>
+    <script src="serialize.js"></script>
+    <script src="foundation.js"></script>
+    <script src = "main.js"></script>
     <script language = "javascript">
     function on(name) {{
         var elements = document.getElementsByClassName(name);

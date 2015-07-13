@@ -30,7 +30,8 @@ fn main() {
         router.get("/doc_en", show_doc_en);
         router.get("/doc_fr", show_doc_fr);
         router.get("/style.css", show_css);
-        router.get("/serialize.js", show_js);
+        router.get("/serialize.js", show_serialize_js);
+        router.get("/main.js", show_main_js);
         router.post("/result", show_result);
         router.get("/foundation.css", show_foundation_css);
         router.get("/normalize.css", show_normalize_css);
@@ -45,8 +46,14 @@ fn main() {
         Ok(Response::with((content_type, status::Ok, img)))
     }
 
-    fn show_js(_: &mut Request) -> IronResult<Response> {
+    fn show_serialize_js(_: &mut Request) -> IronResult<Response> {
         let js = include_str!("html/serialize-0.2.js");
+        let content_type = "text/javascript".parse::<Mime>().unwrap();
+        Ok(Response::with((content_type, status::Ok, js)))
+    }
+    
+    fn show_main_js(_: &mut Request) -> IronResult<Response> {
+        let js = include_str!("html/main.js");
         let content_type = "text/javascript".parse::<Mime>().unwrap();
         Ok(Response::with((content_type, status::Ok, js)))
     }
