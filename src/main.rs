@@ -29,7 +29,6 @@ fn main() {
         router.get("/fr", show_fr);
         router.get("/doc_en", show_doc_en);
         router.get("/doc_fr", show_doc_fr);
-//        router.get("/url", show_url);
         router.get("/style.css", show_css);
         router.get("/serialize.js", show_js);
         router.post("/result", show_result);
@@ -39,24 +38,6 @@ fn main() {
         router.get("/caribon.png", show_logo);
         router
     }
-
-    // fn show_url(_: &mut Request) -> IronResult<Response> {
-    //     let url = "http://linuxfr.org/";
-    //     let mut html:String = String::new();
-
-    //     let client = Client::new();
-    //     let mut res = client.get(url).send().unwrap();
-
-    //     if res.status != hyper::Ok {
-    //         html = html + "Error fetching URL";
-    //         println!("status:{:?}", res.status);
-    //     } else {
-    //         res.read_to_string(&mut html).unwrap();
-    //     }
-
-    //     let content_type = "text/html; charset=UTF-8".parse::<Mime>().unwrap();
-    //     Ok(Response::with((content_type, status::Ok, html)))
-    // }
 
     fn show_logo(_: &mut Request) -> IronResult<Response> {
         let img:&'static[u8] = include_bytes!("html/caribon.png");
@@ -144,6 +125,9 @@ fn main() {
 
     // Try to parse
     fn try_parse(config:Config) -> Result<String, Box<Error>> {
+        if config.max_distance == 0 {
+            return Err(Box::new(caribon::Error::new("Max distance must be a positive integer")));
+        }
         let mut parser = try!(Parser::new(&config.lang));
         parser = parser
             .with_max_distance(config.max_distance)
@@ -167,11 +151,11 @@ fn main() {
             match result {
                 Ok(config) => {
                     match try_parse(config) {
-                        Ok(s) => s,
+                        Ok(s) => format!("<span class = 'alert label'>{}</span>", s),
                         Err(e) => e.description().to_string()
                     }
                 }
-                Err(s) => s,
+                Err(s) => format!("<span class = 'alert label'>{}</span>", s),
             }
         }
         

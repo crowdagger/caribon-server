@@ -188,7 +188,7 @@
                     <label title="Taux maximal de différence entre deux mots, après 
                                   lequel ils ne sont plus considérés comme similaires">
                       Seuil d'approximation :
-                      <input type = "text", name = "fuzzy",
+                      <input type = "text" name = "fuzzy"
                              value = "0.25"/>
                     </label>
                   </div>
@@ -202,13 +202,13 @@
                                   est supérieure au seuil">Activer la
                                   détection globale de répétitions ?
                       <input type = "checkbox" name = "activate_global" value =
-                             "true"/>
+                             "true" checked = "checked"/>
                     </label>
                   </div>
                   <div class = "large-6 columns">
                     <label title="Seulement utilisé si la détection gloable est activée.">
                       Seuil global:
-                      <input type = "text", name = "global_threshold",
+                      <input type = "text" name = "global_threshold"
                              value = "0.01"/>
                     </label>
                   </div>

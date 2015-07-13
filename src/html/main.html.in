@@ -183,7 +183,7 @@
                     <label title="Max ratio of difference between two words until they
                                   are no more considered a repetition">
                       Fuzzy threshold:
-                      <input type = "text", name = "fuzzy",
+                      <input type = "text" name = "fuzzy"
                              value = "0.25"/>
                     </label>
                   </div>
@@ -197,13 +197,13 @@
                                   apparition is superior to threshold">Enable global
                       repetition detection?
                       <input type = "checkbox" name = "activate_global" value =
-                             "true"/>
+                             "true" checked = "checked" />
                     </label>
                   </div>
                   <div class = "large-6 columns">
                     <label title="Only used if global repetition detection is enabled">
                       Global threshold:
-                      <input type = "text", name = "global_threshold",
+                      <input type = "text" name = "global_threshold"
                              value = "0.01"/>
                     </label>
                   </div>
