@@ -151,8 +151,8 @@ fn main() {
             match result {
                 Ok(config) => {
                     match try_parse(config) {
-                        Ok(s) => format!("<span class = 'alert label'>{}</span>", s),
-                        Err(e) => e.description().to_string()
+                        Ok(s) => s,
+                        Err(e) => format!("<span class = 'alert label'>{}</span>", e.description().to_string())
                     }
                 }
                 Err(s) => format!("<span class = 'alert label'>{}</span>", s),
