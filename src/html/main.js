@@ -22,8 +22,16 @@ function load_result()
     var element = document.getElementById("caribon_form");
     console.log("element:"+element);
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onload=function()
-    {
+    xmlhttp.onreadystatechange = function () {
+        if ( 4 != xmlhttp.readyState ) {
+            return;
+        }
+        if (200 != xmlhttp.status) {
+            document.getElementById("result").innerHTML="<span class = 'alert label'>" +
+                xmlhttp.responsetext +
+                "<span>";
+            return;
+        }
         document.getElementById("result").innerHTML=xmlhttp.responseText;
     }
     console.log("action:" + element.action);
