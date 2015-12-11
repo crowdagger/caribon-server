@@ -1,11 +1,11 @@
 [package]
 name = "caribon-server"
-version = "0.6.2"
+version = "0.7.0"
 authors = ["Elisabeth Henry <liz.henry@ouvaton.org>"]
 
 [dependencies]
-iron = "*"
-caribon = "*"
-router = "*"
-urlencoded = "*"
-hyper = "0.6"
+iron = "0.2.6"
+caribon = "0.7"
+router = "0.1"
+urlencoded = "0.2"
+hyper = "0.7"

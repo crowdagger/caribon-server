@@ -105,7 +105,7 @@ fn main() {
     }
 
     fn get_form(lang: &str, text: &str) -> IronResult<Response> {
-        let parser = Parser::new(lang).unwrap().with_html(true);
+        let mut parser = Parser::new(lang).unwrap().with_html(true);
         let mut ast = parser.tokenize(text).unwrap();
         parser.detect_local(&mut ast, 1.9);
         let result = parser.ast_to_html(&mut ast, false);
